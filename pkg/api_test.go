@@ -43,7 +43,7 @@ func Test_API(t *testing.T) {
 }
 
 func Auth_add(t *testing.T, test string) string {
-	cmd := exec.Command("curl", "-X", "GET", "localhost:80/auth/add/"+test)
+	cmd := exec.Command("curl", "-X", "POST", "localhost:80/auth/add/"+test)
 	cmdOutput := &bytes.Buffer{}
 	cmd.Stdout = cmdOutput
 	if err := cmd.Run(); err != nil {
