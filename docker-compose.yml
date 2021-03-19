@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  proxy:
+    image: traefik:v2.4.2
+    container_name: proxy
+    command:
+      - "--log.level=DEBUG"
+      - "--api=true"
+      - "--api.dashboard=true"
+      - "--api.insecure=true" # Don't do that in production
+      - "--providers.docker"
+      - "--entrypoints.web.address=:80"
+      # - "traefik.http.middlewares.auto.basicauth.users=username:password"
+    labels: {}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "80:80"
+      - "8080:8080"
+      
+  auth:
+    container_name: auth
+    build:
+      context: .
+      args:
+        SERVICE_NAME: auth
+    labels: 
+      - traefik.http.routers.auth.rule=PathPrefix(`/auth`)
+      - traefik.http.services.auth.loadbalancer.server.port=4000
+      - traefik.http.middlewares.auth.forwardauth.address=http://auth:4000/auth
+      - traefik.http.middlewares.auth.forwardauth.authResponseHeaders=X-Auth
+    expose:
+      - "4000"
+    depends_on: 
+      - mongo
+
+  auto-debit:
+    container_name: auto-debit
+    environment:
+      MONGO_URL: mongodb://admin:admin@mongo:27017/
+    build:
+      context: .
+      args:
+        SERVICE_NAME: auto-debit-api
+    labels: 
+      - traefik.http.routers.auto-debit.middlewares=auth
+      - traefik.http.routers.auto-debit.rule=PathPrefix(`/auto-debit`)
+      - traefik.http.services.auto-debit.loadbalancer.server.port=4000
+    expose:
+      - "4000"
+    depends_on: 
+      - mongo
+      
+  mongo:
+    container_name: mongo
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
