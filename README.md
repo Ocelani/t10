@@ -76,10 +76,6 @@ Foi utilizado o modelo de microsserviços, do qual os componentes da aplicação
 
 # Problemática da proposta
 
-Olá! 🖖🏽
-
-Nossa intenção é, através deste (breve) desafio, avaliar a habilidade técnica percebida ao empregar e desenvolver uma solução para o problema aqui descrito.
-
 ## Domínio Problema
 
 Uma instituição financeira contratou os serviços da T10 buscando maior **agilidade dos dados** através da metrificação de processos que, até então, não eram _observados_ (apropriadamente). Um dos processos é a solicitação do produto débito automático de empresas parceiras.
@@ -89,15 +85,17 @@ A operação é realizada manualmente e vai ser automatizada por este serviço, 
 
 ## Casos de Uso
 
-- [x] 1. Autenticação e acesso a plataforma
+1. Autenticação e acesso a plataforma
 
-Um usuário autenticado,
+2. solicita uma ativação de débito automático
 
-- [x] 2. solicita uma ativação de débito automático
-- [x] 3. cancela uma solicitação de ativação
-- [x] 4. aprova uma solicitação de ativação
-- [x] 5. rejeita uma solicitação de ativação
-- [x] 6. visualiza uma solicitação
+3. cancela uma solicitação de ativação
+
+4. aprova uma solicitação de ativação
+
+5. rejeita uma solicitação de ativação
+
+6. visualiza uma solicitação
 
 Diagrama do [modelo de eventos](img/model.jpg).
 
